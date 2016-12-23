@@ -1,0 +1,10 @@
+# literally any key = value like pair
+# the value/s are adresses
+#webservers:
+#    - 'example.com'
+#    - 'google.com'
+#    - '127.0.0.1'
+#
+# etc
+
+localhost: localhost

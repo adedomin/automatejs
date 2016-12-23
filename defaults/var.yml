@@ -1,0 +1,11 @@
+# variables
+# by default this file is read after command line added vars.
+
+#somevar: 'x'
+#more_vars: [ 'x', 'y', 'z' ]
+#some_obj:
+#    someattr: 'x'
+#    another:
+#        - nestedobj_arr: 'dsfa'
+
+hosts: localhost

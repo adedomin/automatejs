@@ -1,0 +1,22 @@
+{
+  "name": "automationjs",
+  "version": "1.0.0",
+  "description": "ansible like automation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ansible",
+    "configuration",
+    "management",
+    "cm"
+  ],
+  "author": "Anthony DeDominic",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "js-yaml": "^3.7.0",
+    "jscomposer": "git+https://github.com/adedomin/jcomposer.git",
+    "shelljs": "^0.7.5"
+  }
+}

@@ -1,0 +1,13 @@
+name: 'example'
+description: 'example runbook'
+# target machines
+hosts: ${util.inspect(hosts)}
+# only ssh and local supported
+transport: local
+
+# your tasks here
+# example
+# name: some ident
+# name_of_module: { ...args }
+# serial is the only reserved module
+tasks: []
