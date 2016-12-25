@@ -1,6 +1,6 @@
 {
   "name": "automationjs",
-  "version": "1.1.0-no_debug",
+  "version": "1.1.0-nodebug",
   "description": "ansible like automation",
   "main": "index.js",
   "bin": {
@@ -15,7 +15,7 @@
     "management",
     "cm"
   ],
-  "author": "Anthony DeDominic",
+  "author": "Anthony DeDominic <anthony@dedominic.pw>",
   "license": "Apache-2.0",
   "repository": "https://github.com/adedomin/automatejs",
   "dependencies": {
