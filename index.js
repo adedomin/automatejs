@@ -34,7 +34,6 @@ module.exports = (args, inventory) => {
 
     runbook.on('end', () => {
         runbook = yaml.safeLoad(template(filestr, args)) 
-        console.log(runbook)
         build(runbook)
     })
     
