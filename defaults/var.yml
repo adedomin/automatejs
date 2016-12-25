@@ -8,4 +8,4 @@
 #    another:
 #        - nestedobj_arr: 'dsfa'
 
-hosts: localhost
+host: localhost

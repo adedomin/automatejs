@@ -1,10 +1,9 @@
-# literally any key = value like pair
-# the value/s are adresses
-#webservers:
-#    - 'example.com'
-#    - 'google.com'
-#    - '127.0.0.1'
-#
-# etc
+# an array of server objects
+# objects contain a name, a user
+# and a keyfile which can be used to remote into
+# sudo should be passwordless
 
-localhost: localhost
+localhost:
+  - name: localhost
+    user: automatejs
+    keyfile: '/Users/prussian/.ssh/id_rsa'

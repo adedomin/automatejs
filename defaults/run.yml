@@ -1,13 +1,19 @@
+# name of the runbook
 name: 'example'
+# short desc
 description: 'example runbook'
 # target machines
-hosts: ${util.inspect(hosts)}
-# only ssh and local supported
-transport: local
+# you can use ${var} to access var in variables
+hosts: ${host}
+# should be passwordless
+# yes or no, true or false
+sudo: true
 
 # your tasks here
 # example
 # name: some ident
 # name_of_module: { ...args }
-# serial is the only reserved module
+# serial is the only reserved module name
+# serial ensures the modules, as args,
+# are executed in order as shown
 tasks: []
