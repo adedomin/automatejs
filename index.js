@@ -22,7 +22,7 @@ var yaml = require('js-yaml'),
 
 module.exports = (args, inventory) => {
 
-    if (!args) args = yaml.safeLoads(
+    if (!args) args = yaml.safeLoad(
         fs.readFileSync('./var.yml')
     )
     
@@ -33,9 +33,9 @@ module.exports = (args, inventory) => {
     })
 
     runbook.on('end', () => {
-        runbook = template(filestr, args) 
+        runbook = yaml.safeLoad(template(filestr, args)) 
+        console.log(runbook)
         build(runbook)
-
     })
     
 }

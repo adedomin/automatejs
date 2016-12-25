@@ -44,7 +44,7 @@ else if (process.argv[2] == 'build') {
             input_vars += data
         })
         vars.on('end', () => {
-            index(yaml.safeLoads(input_vars))
+            index(yaml.safeLoad(input_vars))
         })
     }
 }

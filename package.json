@@ -16,6 +16,9 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/adedomin/automatejs",
   "dependencies": {
+    "async.waterfall": "^0.5.2",
+    "automatejs-core": "git+https://github.com/adedomin/automatejs-core.git",
+    "browserify": "^13.1.1",
     "js-yaml": "^3.7.0",
     "jscomposer": "git+https://github.com/adedomin/jcomposer.git",
     "shelljs": "^0.7.5"
