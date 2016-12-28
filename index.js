@@ -18,7 +18,10 @@ var yaml = require('js-yaml'),
     fs = require('fs'),
     build = require('./lib/build'),
     template = require('./lib/template'),
-    transport = require('./lib/transport')
+    transport = require('./lib/transport'),
+    each = require('async.each'),
+    path = require('path').join,
+    config = require(path(process.env.HOME, '.automatejs', 'config.js'))
 
 module.exports = (args, inventory) => {
 
@@ -35,6 +38,15 @@ module.exports = (args, inventory) => {
     runbook.on('end', () => {
         runbook = yaml.safeLoad(template(filestr, args)) 
         build(runbook)
-    })
-    
+        each(inventory[runbook.hosts], (host, cb) => {
+            if (!host.keyfile) host.keyfile = config.ssh.default_keyfile
+            transport(host, (err, ret) => {
+                console.log(`# ${host.host} results:`)
+                console.log(JSON.stringify(ret))
+                cb(err)
+            })
+        })
+    }, (err) => {
+        if (err) throw err
+    }) 
 }
