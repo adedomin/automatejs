@@ -3,7 +3,7 @@ name: 'example'
 # short desc
 description: 'example runbook'
 # target machines
-# you can use ${var} to access var in variables
+# you can use \${var} to access var in variables
 hosts: ${host}
 # should be passwordless
 # yes or no, true or false

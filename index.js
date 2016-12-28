@@ -21,12 +21,22 @@ var yaml = require('js-yaml'),
     transport = require('./lib/transport'),
     each = require('async.each'),
     path = require('path').join,
+    config 
+
+try {
     config = require(path(process.env.HOME, '.automatejs', 'config.js'))
+}
+catch (e) {
+    config = {}
+}
 
 module.exports = (args, inventory) => {
 
     if (!args) args = yaml.safeLoad(
         fs.readFileSync('./var.yml')
+    )
+    if (!inventory) inventory = yaml.safeLoad(
+        fs.readFileSync('./inventory.yml')
     )
     
     var runbook = fs.createReadStream('./run.yml')
@@ -40,13 +50,14 @@ module.exports = (args, inventory) => {
         build(runbook)
         each(inventory[runbook.hosts], (host, cb) => {
             if (!host.keyfile) host.keyfile = config.ssh.default_keyfile
-            transport(host, (err, ret) => {
-                console.log(`# ${host.host} results:`)
-                console.log(JSON.stringify(ret))
+            transport(host, (err, res) => {
+                console.log(`# ${host.host}:`)
+                console.log(`error: ${err}`)
+                console.log(`results: ${res}`)
                 cb(err)
             })
+        }, (err) => {
+            if (err) throw err
         })
-    }, (err) => {
-        if (err) throw err
     }) 
 }
