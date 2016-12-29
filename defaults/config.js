@@ -3,6 +3,9 @@
 var path = require('path').join
 
 var config = {
+    inventory: {
+        default_inventory_file: path(__dirname, 'inventory.yml')
+    },
     ssh: {
         default_user: 'automatejs',
         default_port: 22,

@@ -17,28 +17,31 @@
 
 var init = require('../lib/init'),
     index = require('../index'),
+    getarg = require('../lib/getarg.js'),
     fs = require('fs'),
     yaml = require('js-yaml')
 
 if (process.argv[2] == 'init') return init()
 else if (process.argv[2] == 'build') {
 
-    var inline_var = process.argv.slice(3).indexOf('-V')
-    if (inline_var < 0) inline_var = process.argv.slice(3).indexOf('--variables')
-    if (inline_var > -1) {
-        return index(JSON.parse(process.argv[inline_var+3]))
-    }
+    var args, inventory
+    var arg_v = getarg('-V', '--variables')
+    if (arg_v) args = JSON.parse(arg_v)
+    var inv_v = getarg('-i', '--inventory')
+    if (inv_v) inventory = yaml.safeLoad(
+        fs.readFileSync(inv_v)
+    )
 
     var input_vars = ''
-    if (!process.stdin.isTTY) {
+    if (!process.stdin.isTTY && !args) {
         process.stdin.on('data', data => {
             input_vars += data    
         })
         process.stdin.on('end', () => {
-            index(JSON.parse(input_vars))
+            index(JSON.parse(input_vars), inventory)
         })
     }
-    else {
+    else if (!args) {
         var vars = fs.createReadStream('var.yml')
         vars.on('data', data => {
             input_vars += data
@@ -46,5 +49,8 @@ else if (process.argv[2] == 'build') {
         vars.on('end', () => {
             index(yaml.safeLoad(input_vars))
         })
+    }
+    else {
+        index(args, inventory)
     }
 }

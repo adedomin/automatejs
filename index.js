@@ -35,9 +35,21 @@ module.exports = (args, inventory) => {
     if (!args) args = yaml.safeLoad(
         fs.readFileSync('./var.yml')
     )
-    if (!inventory) inventory = yaml.safeLoad(
-        fs.readFileSync('./inventory.yml')
-    )
+
+    if (!inventory) {
+        try {
+            inventory = yaml.safeLoad(
+                fs.readFileSync('./inventory.yml')
+            )
+        }
+        catch (e) {
+            inventory = yaml.safeLoad(
+                fs.readFileSync(
+                    config.inventory.default_inventory_file
+                )
+            )
+        }
+    }
     
     var runbook = fs.createReadStream('./run.yml')
     var filestr = ''
