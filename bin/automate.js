@@ -19,38 +19,39 @@ var init = require('../lib/init'),
     index = require('../index'),
     getarg = require('../lib/getarg.js'),
     fs = require('fs'),
-    yaml = require('js-yaml')
+    yaml = require('js-yaml'),
+    deploy = true
 
 if (process.argv[2] == 'init') return init()
-else if (process.argv[2] == 'build') {
+if (process.argv[2] == 'build') deploy = false
 
-    var args, inventory
-    var arg_v = getarg('-V', '--variables')
-    if (arg_v) args = JSON.parse(arg_v)
-    var inv_v = getarg('-i', '--inventory')
-    if (inv_v) inventory = yaml.safeLoad(
-        fs.readFileSync(inv_v)
-    )
+var args, inventory
+var arg_v = getarg('-V', '--variables')
+if (arg_v) args = JSON.parse(arg_v)
+var inv_v = getarg('-i', '--inventory')
+if (inv_v) inventory = yaml.safeLoad(
+    fs.readFileSync(inv_v)
+)
 
-    var input_vars = ''
-    if (!process.stdin.isTTY && !args) {
-        process.stdin.on('data', data => {
-            input_vars += data    
-        })
-        process.stdin.on('end', () => {
-            index(JSON.parse(input_vars), inventory)
-        })
-    }
-    else if (!args) {
-        var vars = fs.createReadStream('var.yml')
-        vars.on('data', data => {
-            input_vars += data
-        })
-        vars.on('end', () => {
-            index(yaml.safeLoad(input_vars))
-        })
-    }
-    else {
-        index(args, inventory)
-    }
+var input_vars = ''
+if (!process.stdin.isTTY && !args) {
+    process.stdin.on('data', data => {
+        input_vars += data    
+    })
+    process.stdin.on('end', () => {
+        index(JSON.parse(input_vars), inventory, deploy)
+    })
+    return
 }
+
+var vars = fs.createReadStream('var.yml')
+vars.on('data', data => {
+    input_vars += data
+})
+vars.on('end', () => {
+    var newargs = Object.assign({}, yaml.safeLoad(input_vars), args)
+    index(newargs, inventory, deploy)
+})
+vars.on('error', () => {
+    index(args, inventory, deploy)
+})

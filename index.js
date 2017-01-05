@@ -19,6 +19,7 @@ var yaml = require('js-yaml'),
     build = require('./lib/build'),
     template = require('./lib/template'),
     transport = require('./lib/transport'),
+    coreRepl = require('./lib/replace-core.js'),
     each = require('async.each'),
     path = require('path').join,
     config 
@@ -30,7 +31,7 @@ catch (e) {
     config = {}
 }
 
-module.exports = (args, inventory) => {
+module.exports = (args, inventory, deploy) => {
 
     if (!args) args = yaml.safeLoad(
         fs.readFileSync('./var.yml')
@@ -59,7 +60,13 @@ module.exports = (args, inventory) => {
 
     runbook.on('end', () => {
         runbook = yaml.safeLoad(template(filestr, args)) 
+        runbook.tasks = coreRepl(runbook.tasks)
         build(runbook)
+        if (!deploy) {
+            console.log("index.js is now available in .temp.tar.gz or .temp_build/ in your working directory.")
+            console.log("Not deploying, you can deploy or execute it yourself.")
+            return
+        }
         each(inventory[runbook.hosts], (host, cb) => {
             if (!host.keyfile) host.keyfile = config.ssh.default_keyfile
             transport(host, (err, res) => {
